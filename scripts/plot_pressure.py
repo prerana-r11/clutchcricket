@@ -18,6 +18,12 @@ match_df = df[
 
 # Remove rows without pressure
 match_df = match_df.dropna(subset=["pressure"])
+match_df["pressure_delta"] = match_df["pressure"].diff()
+
+turning_points = match_df.sort_values(
+    by="pressure_delta",
+    ascending=False
+).head(5)
 
 # Create x-axis using legal balls bowled
 x = match_df["balls_bowled"]
@@ -44,4 +50,20 @@ plt.savefig(
     dpi=300,
     bbox_inches="tight"
 )
+plt.scatter(
+    turning_points["balls_bowled"],
+    turning_points["pressure"],
+    marker="o",
+    s=100,
+    label="Turning Point"
+)
+
+for _, row in turning_points.iterrows():
+    plt.annotate(
+        f"{int(row['over'])}.{int(row['balls_bowled'] % 6)}",
+        (row["balls_bowled"], row["pressure"]),
+        textcoords="offset points",
+        xytext=(0, 10),
+        ha="center"
+    )
 plt.show()
