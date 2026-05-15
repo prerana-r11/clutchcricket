@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 # Load dataset
 df = pd.read_csv(
@@ -35,4 +36,12 @@ plt.ylabel("Pressure")
 
 plt.grid(True)
 
+OUTPUT_DIR = Path(r"C:\ClutchCricket\visuals")
+OUTPUT_DIR.mkdir(exist_ok=True)
+
+plt.savefig(
+    OUTPUT_DIR / f"pressure_curve_{match_id}.png",
+    dpi=300,
+    bbox_inches="tight"
+)
 plt.show()
